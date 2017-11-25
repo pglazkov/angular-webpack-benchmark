@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig",
+  "compilerOptions": {
+    "module": "es2015",
+    "sourceMap": false
+  },
+  "angularCompilerOptions": {
+    "genDir": "./aot_temp",
+    "skipMetadataEmit": true
+  }
+}

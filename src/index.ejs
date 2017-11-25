@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Angular Webpack Benchmark</title>
+  <meta name="description" content="Angular Webpack Benchmark">    
+
+  <base href="<%= htmlWebpackPlugin.options.metadata.apps.length %>">
+</head>
+
+<body>
+
+  <h1>App Index</h1>
+  
+  <ul>
+    <% htmlWebpackPlugin.options.metadata.apps.forEach(function(app){ %>
+      <li><a href="<%= app.baseUrl %>"><%- app.name %></a></li>
+    <% }); %>
+  </ul>
+
+</body>
+</html>

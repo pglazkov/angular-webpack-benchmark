@@ -3,7 +3,7 @@
     "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
-    "outDir": "./tsc-out",
+    "outDir": "./dist/tsc-out",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
@@ -24,8 +24,8 @@
     "baseUrl": "src"
   },
   "exclude": [
-    "node_modules",
-    "wwwroot",
+    "node_modules",    
+    "dist",
     "src/**/*.aot.ts",
     "src/**/**.aot.ts",
     "generate.ts"

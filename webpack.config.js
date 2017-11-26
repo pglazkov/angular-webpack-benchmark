@@ -13,17 +13,6 @@ const HappyPack = require('happypack');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const apps = [
-  {
-    name: 'airplane',
-    baseUrl: '/airplane'
-  },
-  {
-    name: 'biofuels',
-    baseUrl: '/biofuels'
-  }
-];
-
 const stats = true;
 
 module.exports = function (args = {}) {  
@@ -40,17 +29,10 @@ module.exports = function (args = {}) {
     stats: true,
     bail: true,
     devtool: isDev ? 'cheap-module-source-map' : undefined,
-    entry: (() => {
-      let entry = {
-        'polyfills': './src/polyfills.ts'
-      };
-
-      apps.forEach(function (app) {
-        entry[getAppBundleName(app)] = './src/apps/' + app.name + (isAot ? '/main.aot.ts' : '/main.ts');
-      });
-
-      return entry;
-    })(),
+    entry: {
+      'polyfills': './src/polyfills.ts',
+      'app': './src/' + (isAot ? 'main.aot.ts' : 'main.ts')
+    },
 
     output: {
       path: root(distPath),
@@ -109,16 +91,19 @@ module.exports = function (args = {}) {
         }),
         new CommonsChunkPlugin({
           name: 'vendor',
-          chunks: apps.map(getAppBundleName),
+          chunks: ['app'],
           minChunks: module => /node_modules/.test(module.resource)
         }),
     
         new HtmlWebpackPlugin({
           template: root('src', 'index.ejs'),
+          title: 'Angular Webpack Benchmark',
           filename: 'index.html',
-          inject: false,
+          chunksSortMode: 'manual',
+          chunks: ['polyfills', 'vendor', 'app'],
+          inject: 'body',
           metadata: {
-            apps: apps
+            isDevServer: process.argv[1] && !!(/webpack-dev-server/.exec(process.argv[1]))            
           }
         })
       ];
@@ -151,30 +136,6 @@ module.exports = function (args = {}) {
           })
         ]);
       }
-
-      apps.forEach((app) => {
-        var otherApps = apps.slice();
-    
-        var appItemIndex = otherApps.indexOf(app);
-    
-        if (appItemIndex > -1) {
-          otherApps.splice(appItemIndex, 1);
-        }
-    
-        plugins.push(new HtmlWebpackPlugin({
-          template: root('src', 'app-index.ejs'),
-          title: app.name,
-          filename: getAppHtmlFileName(app),
-          excludeChunks: otherApps.map(getAppBundleName),
-          chunksSortMode: 'manual',
-          chunks: ['polyfills', 'vendor', getAppBundleName(app)],
-          inject: 'body',
-          metadata: {
-            isDevServer: process.argv[1] && !!(/webpack-dev-server/.exec(process.argv[1])),
-            baseUrl: app.baseUrl
-          }
-        }));
-      });
 
       if (!isDev) {
         plugins = plugins.concat([
@@ -214,13 +175,7 @@ module.exports = function (args = {}) {
       port: 5000,
       stats: true,
       historyApiFallback: {
-        index: `/${distPath}/`,
-        rewrites: apps.map(function (app) {
-          return {
-            from: new RegExp('^' + app.baseUrl + '(\/.*|$)'),
-            to: `/${distPath}/` + getAppHtmlFileName(app)
-          }
-        })
+        index: `/${distPath}/`
       }
     },
 
@@ -237,14 +192,6 @@ module.exports = function (args = {}) {
       hints: false
     }
   };
-}
-
-function getAppBundleName(app) {
-  return app.name;
-}
-
-function getAppHtmlFileName(app) {
-  return app.name + '_index.html';
 }
 
 function root(args) {

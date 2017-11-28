@@ -22,7 +22,44 @@ module.exports = function (args = {}) {
   const aotOutputPath = 'aot_temp';
   const tsConfigName = isDev ? 'tsconfig.json' : 'tsconfig.prod.json';  
   const cpuCount = os.cpus().length;
-  const happypackMode = !!args.HAPPYPACK;
+  const happyPackMode = !!args.HAPPYPACK;
+
+  const tsLoaders =(() => {
+    let loaders = [];
+
+    if (!isDev) {
+      loaders.push(
+        {
+          loader: '@angular-devkit/build-optimizer/webpack-loader',
+          options: {
+            sourceMap: false
+          }
+        }
+      );
+    }
+
+    loaders = loaders.concat([      
+      {
+        loader: 'angular-router-loader',
+        options: {
+          debug: true,
+          loader: 'system'
+        }
+      },
+      { 
+        loader: 'ts-loader', 
+        options: { 
+          configFile: tsConfigName,
+          happyPackMode: happyPackMode
+        } 
+      },
+      {
+        loader: 'angular2-template-loader'
+      } 
+    ]);
+
+    return loaders;
+  })(); 
 
   return {
     target: 'web',
@@ -50,14 +87,9 @@ module.exports = function (args = {}) {
       rules: [
         {
           test: /\.ts$/,
-          use: happypackMode 
+          use: happyPackMode 
             ? 'happypack/loader?id=ts' 
-            : { 
-                loader: 'ts-loader', 
-                options: { 
-                  configFile: tsConfigName 
-                } 
-              }
+            : tsLoaders
         },
         {
           test: /\.css$/,
@@ -108,7 +140,7 @@ module.exports = function (args = {}) {
         })
       ];
 
-      if (happypackMode) {
+      if (happyPackMode) {
         plugins = plugins.concat([
           new HappyPack({
             id: 'ts',
@@ -116,15 +148,12 @@ module.exports = function (args = {}) {
               cpuCount > 1 ? (cpuCount - 1 /* at least 1 cpu for the fork-ts-checker-webpack-plugin */) : 1, 
               8 /* More than 8 threads probably will not improve the build speed */
             ),
-            loaders: [
-              {
-                path: 'ts-loader',
-                query: {
-                  configFile: tsConfigName,
-                  happyPackMode: true
-                }
-              }
-            ]
+            loaders: tsLoaders.map(l => { 
+              return { 
+                path: l.loader, 
+                query: l.options 
+              };
+            })
           }),
       
           new ForkTsCheckerWebpackPlugin({

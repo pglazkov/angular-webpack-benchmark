@@ -2,6 +2,15 @@
 # yarn lockfile v1
 
 
+"@angular-devkit/build-optimizer@^0.0.33":
+  version "0.0.33"
+  resolved "https://registry.yarnpkg.com/@angular-devkit/build-optimizer/-/build-optimizer-0.0.33.tgz#d040f283ed7300b5be8bc970228b835ed02df42f"
+  dependencies:
+    loader-utils "^1.1.0"
+    source-map "^0.5.6"
+    typescript "^2.3.3"
+    webpack-sources "^1.0.1"
+
 "@angular/common@4.4.6":
   version "4.4.6"
   resolved "https://registry.yarnpkg.com/@angular/common/-/common-4.4.6.tgz#4b81420724e0828a0e839b95a55eb1a7e83918f2"
@@ -132,6 +141,18 @@ alphanum-sort@^1.0.1, alphanum-sort@^1.0.2:
 amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
+
+angular-router-loader@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/angular-router-loader/-/angular-router-loader-0.8.0.tgz#d73acb1c88a135823c7841c997a99375c7f54af5"
+  dependencies:
+    loader-utils "^1.0.2"
+
+angular2-template-loader@^0.6.2:
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/angular2-template-loader/-/angular2-template-loader-0.6.2.tgz#c0d44e90fff0fac95e8b23f043acda7fd1c51d7c"
+  dependencies:
+    loader-utils "^0.2.15"
 
 ansi-html@0.0.7:
   version "0.0.7"
@@ -2260,7 +2281,7 @@ loader-utils@1.1.0, loader-utils@^1.0.1, loader-utils@^1.0.2, loader-utils@^1.1.
     emojis-list "^2.0.0"
     json5 "^0.5.0"
 
-loader-utils@^0.2.16, loader-utils@~0.2.2:
+loader-utils@^0.2.15, loader-utils@^0.2.16, loader-utils@~0.2.2:
   version "0.2.17"
   resolved "https://registry.yarnpkg.com/loader-utils/-/loader-utils-0.2.17.tgz#f86e6374d43205a6e6c60e9196f17c0299bfb348"
   dependencies:
@@ -4113,6 +4134,10 @@ typedarray@^0.0.6:
 typescript@2.6.1:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.6.1.tgz#ef39cdea27abac0b500242d6726ab90e0c846631"
+
+typescript@^2.3.3:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.6.2.tgz#3c5b6fd7f6de0914269027f03c0946758f7673a4"
 
 uglify-js@3.1.x:
   version "3.1.10"
